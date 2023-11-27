@@ -19,21 +19,21 @@ The GraphQL server build to learn working of graphQL server.
 To get started with the Movie Database API, follow these steps:
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/Suraj-AM/graphQL
-   cd graphQL
-   ```
+```bash
+git clone https://github.com/Suraj-AM/graphQL
+cd graphQL
+```
 
 2. install dependencies:
-    ```bash
-    yarn
-    ```
+```bash
+yarn
+```
 
 ## Usage
 To run the graphQL API server, execute the following command:
-    ```bash
-    yarn dev
-    ```
+```bash
+yarn dev
+```
 
 Once the server is running, access the GraphQL Playground or use your preferred GraphQL client to interact with the API.
 
@@ -43,15 +43,14 @@ The API does not require specific configuration for basic usage. However, additi
 ## Examples
 To check serve is running or not try http://localhost:8080/graphql
 
-### Example Queries
+### 1.Example Queries
 use GraphQL queries:
-
-    ```bash
-    query helloQuery 
-        {
-            hello
-        }
-    ```
+```bash
+query helloQuery 
+    {
+        hello
+    }
+```
 
 ## License
 
