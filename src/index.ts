@@ -1,8 +1,7 @@
 import express from 'express';
-import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import typeDefs from './typeDefs';
-import resolver from './resolvers';
+import graphQLServer from './apolloServer';
+
 
 async function startServer() {
 
@@ -12,11 +11,7 @@ async function startServer() {
 
     app.use(express.json());
 
-    // Create apollo/GraphQL server
-    const graphQLServer = new ApolloServer({
-        typeDefs: typeDefs, // schema
-        resolvers: resolver // resolvers
-    });
+
 
     // Start apollo/GraphQL server
     await graphQLServer.start();
