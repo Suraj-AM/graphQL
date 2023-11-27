@@ -31,7 +31,6 @@ To get started with the Movie Database API, follow these steps:
 
 ## Usage
 To run the graphQL API server, execute the following command:
-
     ```bash
     yarn dev
     ```
@@ -47,12 +46,12 @@ To check serve is running or not try http://localhost:8080/graphql
 ### Example Queries
 use GraphQL queries:
 
-```bash
-query helloQuery 
-    {
-        hello
-    }
-```
+    ```bash
+    query helloQuery 
+        {
+            hello
+        }
+    ```
 
 ## License
 

@@ -1,8 +1,8 @@
 import express from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import { queryTypeDefs, queryResolvers } from './query';
-
+import typeDefs from './typeDefs';
+import resolver from './resolvers';
 
 async function startServer() {
 
@@ -14,14 +14,8 @@ async function startServer() {
 
     // Create apollo/GraphQL server
     const graphQLServer = new ApolloServer({
-        typeDefs: `
-            type Query {
-                ${queryTypeDefs}
-            }`, // schema
-
-        resolvers: {
-            Query: queryResolvers
-        } // resolvers
+        typeDefs: typeDefs, // schema
+        resolvers: resolver // resolvers
     });
 
     // Start apollo/GraphQL server
