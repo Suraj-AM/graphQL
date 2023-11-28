@@ -18,11 +18,17 @@ const plugin: ApolloServerPlugin<BaseContext> = {
     // },
 };
 
+const ErrorFormatter = (error: any) => {
+    const message = error.message || 'An unknown error occurred.';
+    return { message };
+};
+
 // Create apollo/GraphQL server
 const graphQLServer = new ApolloServer({
-    typeDefs: typeDefs,     // schema
-    resolvers: resolver,    // resolvers
-    plugins: [plugin]       // plugin ref: https://www.apollographql.com/docs/apollo-server/integrations/plugins
+    typeDefs: typeDefs,             // schema
+    resolvers: resolver,            // resolvers
+    plugins: [plugin],              // plugin ref: https://www.apollographql.com/docs/apollo-server/integrations/plugins
+    formatError: ErrorFormatter     // error formatter
 });
 
 
