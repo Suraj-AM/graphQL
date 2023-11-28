@@ -7,9 +7,9 @@ const userQuery = {
 };
 
 const userMutation = {
-    hello: asyncGraphQLRequest(async (_: any, args: any, contextValue: any) => {
-        const user = await userService.createUser({ name: "suraj", email: "suraj2@gmail.com", mobile: 7219550691, password: "Suraj@222" });
-        return user;
+    createUser: asyncGraphQLRequest(async (_: any, args: any, contextValue: any) => {
+        const user = await userService.createUser({ name: args.name, email: args.email, mobile: args.mobile, password: args.password });
+        return { _id: user._id };
     })
 };
 

@@ -1,8 +1,15 @@
 const userQuery = `
 hello:String
 `;
-const userMutation = `
-hello:String
+
+const userTypes = `
+type createUserResponse { 
+    _id:ID
+}
 `;
 
-export { userQuery, userMutation };
+const userMutation = `
+createUser(name:String!, email:String!, mobile:String!, password:String!):createUserResponse
+`;
+
+export { userQuery, userMutation, userTypes };

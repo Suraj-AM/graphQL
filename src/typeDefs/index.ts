@@ -1,6 +1,7 @@
-import { userQuery, userMutation } from './user.typedefs';
+import { userQuery, userMutation, userTypes } from './user.typedefs';
 
 const typeDefs = `
+    ${userTypes}
     type Query {
         ${userQuery}
     }
