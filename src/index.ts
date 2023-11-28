@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
 import graphQLServer from './apolloServer';
+import authContext from './middleware/graphQl.authentication';
 import env from './config/config';
 import logger from './config/logger';
 import morgan from './config/morgan';
@@ -14,9 +15,6 @@ async function startServer() {
     // Create express ap
     const app = express();
 
-    app.use(express.json());
-    // Set necessary HTTP headers for app security
-    app.use(helmet());
 
     // JSON requests are received as plain text. We need to parse the json request body.
     app.use(express.json());
@@ -42,7 +40,10 @@ async function startServer() {
     await graphQLServer.start();
 
     // Configure GraphQL server to express server
-    app.use('/graphql', expressMiddleware(graphQLServer));
+    app.use('/graphql', expressMiddleware(graphQLServer, { context: authContext }));
+
+    // Set necessary HTTP headers for app security
+    app.use(helmet());
 
     // Start express app 
     app.listen(env.port, () => logger.info(`server is running on port: ${env.port}`));
