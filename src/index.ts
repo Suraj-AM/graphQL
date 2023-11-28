@@ -1,12 +1,12 @@
 import express from 'express';
+import mongoose from "mongoose";
 import { expressMiddleware } from '@apollo/server/express4';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
 import graphQLServer from './apolloServer';
 import authContext from './middleware/graphQl.authentication';
-import env from './config/config';
-import logger from './config/logger';
+import config from './config/config';
 import morgan from './config/morgan';
 
 
@@ -29,7 +29,7 @@ async function startServer() {
     app.use(cors());
     app.options('*', cors());
 
-    if (env.env !== 'test') {
+    if (config.env !== 'test') {
         app.use(morgan.successHandler);
         app.use(morgan.errorHandler);
     }
@@ -45,8 +45,18 @@ async function startServer() {
     // Set necessary HTTP headers for app security
     app.use(helmet());
 
-    // Start express app 
-    app.listen(env.port, () => logger.info(`server is running on port: ${env.port}`));
+    mongoose.set("strictQuery", true);
+
+    // Connect to MongoDB using mongoose
+    mongoose.connect(config.mongoose.url, config.mongoose.options).then((_db) => {
+        console.log("\x1b[36m%s\x1b[1m", "------------------------------------------------------");
+        console.log("\x1b[36m%s\x1b[0m", `info: Connected to MongoDB => ${config.mongoose.url}`);
+        app.listen(config.port, () => {
+            console.log("\x1b[36m%s\x1b[0m", "------------------------------------------------------");
+            console.log("\x1b[32m%s\x1b[0m", `info: Node server listening on port => ${config.port}`);
+            console.log("\x1b[36m%s\x1b[0m", "------------------------------------------------------");
+        });
+    });
 
 }
 
