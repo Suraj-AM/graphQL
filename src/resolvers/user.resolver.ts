@@ -1,10 +1,14 @@
 
 const userQuery = {
-    hello: () => 'From user resolver'
+    hello: async (_: any, args: any, contextValue: any) => {
+        return 'Hey their Server is up' + JSON.stringify(contextValue);
+    }
 };
 
 const userMutation = {
-    hello: () => 'Hey their Server is up'
+    hello: (_: any, args: any, contextValue: any) => {
+        return 'Hey their Server is up' + JSON.stringify(contextValue);
+    }
 };
 
 export { userQuery, userMutation };
