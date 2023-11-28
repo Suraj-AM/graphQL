@@ -21,7 +21,7 @@ const asyncGraphQLRequest = (fn: GraphQLMiddlewareFn) => async (
   } catch (err: any) {
     throw new GraphQLError(err, {
       extensions: {
-        code: 'INTERNALSERVERERROR',
+        code: 'INTERNAL_SERVER_ERROR',
         http: { status: 500 },
       }
     });
