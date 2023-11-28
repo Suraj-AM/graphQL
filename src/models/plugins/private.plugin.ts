@@ -1,10 +1,6 @@
-import { Schema, Document, Model } from 'mongoose';
+import { Document } from 'mongoose';
 
-interface PrivateOptions {
-  private?: boolean;
-}
-
-const deleteAtPath = (obj: any, path: string[], index: number): void => {
+const deleteAtPath = (obj: Record<string, any>, path: string[], index: number): void => {
   if (index === path.length - 1) {
     delete obj[path[index]];
     return;
@@ -12,24 +8,26 @@ const deleteAtPath = (obj: any, path: string[], index: number): void => {
   deleteAtPath(obj[path[index]], path, index + 1);
 };
 
-const privatePlugin = <T extends Document>(
-  schema: Schema<T, Model<T>, {}>
-): void => {
-  schema.set('toJSON', {
-    transform: function (doc, ret) {
-      const schemaPaths = Object.keys(schema.paths);
+const privatePlugin = (schema: any): void => {
+  let transform: ((doc: Document, ret: Record<string, any>, options: any) => void) | undefined;
 
-      schemaPaths.forEach((path) => {
-        const schemaType = schema.path(path);
-        const schemaOptions = schemaType.options as PrivateOptions;
+  if (schema.options.toJSON && schema.options.toJSON.transform) {
+    transform = schema.options.toJSON.transform as (doc: Document, ret: Record<string, any>, options: any) => void;
+  }
 
-        if (schemaOptions && schemaOptions.private) {
+  schema.options.toJSON = Object.assign(schema.options.toJSON || {}, {
+    transform(doc: Document, ret: Record<string, any>, options: any): void {
+      Object.keys(schema.paths).forEach((path) => {
+        if (schema.paths[path].options && schema.paths[path].options.private) {
           deleteAtPath(ret, path.split('.'), 0);
         }
       });
 
       delete ret.__v;
-      return ret;
+
+      if (transform) {
+        return transform(doc, ret, options);
+      }
     },
   });
 };
