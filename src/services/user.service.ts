@@ -12,7 +12,7 @@ const getUserByEmail = async (UserEmail: string): Promise<Document | null> => {
   return user;
 };
 
-const getUserByMobile = async (UserMobile: string): Promise<Document | null> => {
+const getUserByMobile = async (UserMobile: string): Promise<Document | any> => {
   const user = await User.findOne({ mobile: UserMobile });
   if (!user) {
     throw new Error('User not found!');

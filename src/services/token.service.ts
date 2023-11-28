@@ -1,10 +1,7 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import config from '../config/config';
-
-type User = {
-  id: string
-}
+import { Document } from "mongoose";
 
 /**
  * Generate token
@@ -39,9 +36,9 @@ const verifyToken = (token: string): string | object => {
  * @param {User} user
  * @returns {Object}
  */
-const generateAuthTokens = (user: User): { token: string; expires: Date } => {
+const generateAuthTokens = (user: Document): { token: string; expires: Date } => {
   const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
-  const accessToken = generateToken(user.id, accessTokenExpires);
+  const accessToken = generateToken(user._id, accessTokenExpires);
 
   return {
     token: accessToken,
