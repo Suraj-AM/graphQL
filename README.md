@@ -29,6 +29,12 @@ cd graphQL
 yarn
 ```
 
+3. create environment file
+```bash
+cp .env.example .env
+```
+> add your mongo db link in _**.env**_ file.
+
 ## Usage
 To run the graphQL API server, execute the following command:
 ```bash
