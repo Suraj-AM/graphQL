@@ -5,11 +5,20 @@ const userTypes = `
     type loginUserResponse {
         accessToken:String!
     }
+    type getUserResponse {
+        name:String
+        email:String
+        mobile:String
+        deleted:String
+        _id:String
+        _v:String
+    }
     `;
     
 const userQuery = `
     hello:String
     loginUser(mobile:String!, password:String!):loginUserResponse
+    getUser(userID:String):getUserResponse
     `;
 
 

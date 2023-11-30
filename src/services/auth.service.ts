@@ -2,7 +2,7 @@ import { generatePassword } from "../utils/password";
 import userService from "./user.service";
 import socialAuthService from "./social.auth.service";
 import { Document } from "mongoose";
-import { GraphQLError } from 'graphql';
+import customGraphQLError from '../utils/errorHandler';
 
 interface GoogleUser {
     name: string;
@@ -42,12 +42,7 @@ const registerUserWithFacebook = async (idToken: string): Promise<Document> => {
 const loginUserWithEmailAndPassword = async (mobile: string, password: string): Promise<Document> => {
     const user = await userService.getUserByMobile(mobile);
     if (!user || !(await user.isPasswordMatch(password))) {
-        throw new GraphQLError('User email or password is incorrect', {
-            extensions: {
-                code: 'UNAUTHENTICATED',
-                http: { status: 401 },
-            }
-        });
+        throw new customGraphQLError(401, 'User email or password is incorrect', 'BAD_REQUEST');
     }
     return user;
 };
@@ -55,21 +50,12 @@ const loginUserWithEmailAndPassword = async (mobile: string, password: string): 
 const loginWithGoogle = async (idToken: string): Promise<Document> => {
     const googleUser: GoogleUser = await socialAuthService.verifyGoogleUser(idToken);
     if (!googleUser.email || !googleUser.email_verified) {
-        throw new GraphQLError('internal server error', {
-            extensions: {
-                code: 'INTERNAL_SERVER_ERROR',
-                http: { status: 500 },
-            }
-        });
+        throw new customGraphQLError(404, 'user not found!', 'NOT_FOUND');
     }
     const user = await userService.getUserByEmail(googleUser.email);
     if (!user) {
-        throw new GraphQLError('User not found!', {
-            extensions: {
-                code: 'NOT_FOUND',
-                http: { status: 404 },
-            }
-        });
+        throw new customGraphQLError(404 , 'User not found!','NOT_FOUND')
+        
     }
     return user;
 };
@@ -78,12 +64,8 @@ const loginWithFacebook = async (idToken: string): Promise<Document> => {
     const facebookUser: FacebookUser = await socialAuthService.verifyFacebookUser(idToken);
     const user = await userService.getUserByEmail(facebookUser.email);
     if (!user) {
-        throw new GraphQLError('User not found!', {
-            extensions: {
-                code: 'NOT_FOUND',
-                http: { status: 404 },
-            }
-        });
+        throw new customGraphQLError(404 , 'User not found!','NOT_FOUND')
+
     }
     return user;
 };
@@ -98,12 +80,7 @@ const socialLogin = async (provider: string, idToken: string): Promise<Document>
             user = await loginWithFacebook(idToken);
             break;
         default:
-            throw new GraphQLError(`${provider} Provider Not Found`, {
-                extensions: {
-                    code: 'NOT_FOUND',
-                    http: { status: 404 },
-                }
-            });
+            throw new customGraphQLError(404 , `${provider} Provider Not Found`,'NOT_FOUND');
     }
     return user;
 };

@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import customGraphQLError from '../utils/errorHandler';
 
 
 type GraphQLMiddlewareFn = (
@@ -19,12 +19,7 @@ const asyncGraphQLRequest = (fn: GraphQLMiddlewareFn) => async (
   try {
     return await fn(resolve, parent, args, context, info);
   } catch (err: any) {
-    throw new GraphQLError(err, {
-      extensions: {
-        code: 'INTERNAL_SERVER_ERROR',
-        http: { status: 500 },
-      }
-    });
+    throw new customGraphQLError(500,err)
   }
 };
 

@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import customGraphQLError from '../utils/errorHandler';
 import userService from '../services/user.service';
 import tokenService from '../services/token.service';
 
@@ -24,23 +24,13 @@ const   context = async ({ req }: { req: any}): Promise<Context> => {
 
         // If user deleted or not found
         if (!user) {
-            throw new GraphQLError('User is not authenticated', {
-                extensions: {
-                    code: 'UNAUTHENTICATED',
-                    http: { status: 401 },
-                }
-            });
+            throw new customGraphQLError(401,'User is not authenticated', 'UNAUTHENTICATED');
         }
 
         // Set user in context
         return { user };
     } catch (err: any) {
-        throw new GraphQLError(err, {
-            extensions: {
-                code: 'INTERNALSERVERERROR',
-                http: { status: 500 },
-            }
-        });
+        throw new customGraphQLError(500,err);
     }
 };
 
