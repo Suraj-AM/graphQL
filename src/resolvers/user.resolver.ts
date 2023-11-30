@@ -2,6 +2,7 @@ import userService from "../services/user.service";
 import asyncGraphQLRequest from "../utils/catchAsyncGraphQL";
 import tokenService from "../services/token.service";
 import authService from '../services/auth.service';
+import customGraphQLError from "../utils/errorHandler";
 
 const userQuery = {
     hello: async (_: any, args: any, contextValue: any) => {
@@ -12,6 +13,14 @@ const userQuery = {
         const user = await authService.loginUserWithEmailAndPassword(mobile, password);
         const { token, expires } = tokenService.generateAuthTokens(user);
         return { "accessToken": token };
+    }),
+    getUser: asyncGraphQLRequest(async (_: any, args: any, contextValue: any) => {
+        const userID = args.userID;
+        if(!userID){
+            throw new customGraphQLError(401,"please provide user id", 'NOT_FOUND' )
+        }
+        const user = userService.getUserByID(userID);
+        return user;
     })
 };
 

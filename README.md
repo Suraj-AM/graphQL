@@ -54,6 +54,6 @@ query helloQuery
 
 ## License
 
-This README file provides basic instructions, examples of GraphQL queries/mutations, and guidelines for contributing, giving users and potential contributors a clear understanding of the project's purpose and how to interact with it. Adjust and expand upon it according to your project's specifics.
+This README file provides basic instructions, examples of GraphQL queries/mutations,
 
 
