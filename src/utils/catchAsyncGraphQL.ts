@@ -19,7 +19,10 @@ const asyncGraphQLRequest = (fn: GraphQLMiddlewareFn) => async (
   try {
     return await fn(resolve, parent, args, context, info);
   } catch (err: any) {
-    throw new customGraphQLError(500,err)
+    if (err instanceof customGraphQLError) {
+      throw err;
+    }
+    throw new customGraphQLError(500, err);
   }
 };
 
