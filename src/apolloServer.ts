@@ -10,21 +10,30 @@ const plugin: ApolloServerPlugin<BaseContext> = {
         return;
     },
 
-    // // Fires whenever a GraphQL request is received from a client.
-    // async requestDidStart(requestContext) {
-    //     console.log('Request started!');
+    // Fires whenever a GraphQL request is received from a client.
+    async requestDidStart(requestContext:any) {
+        logger.info(`method: ${requestContext.request.http?.body?.operationName}`)
+        
+        return {
+            // Fires when request being to complete and sending to client.
+            async willSendResponse({ response }: { response: any; }) {
+                if ((response.body.kind = 'single') &&
+                    (response.body.singleResult.errors?.[0]?.extensions?.status)
+                ) {
+                    // set http status
+                    response.http.status = response.body.singleResult.errors[0].extensions.status;
+                }
 
-    //     return ;
-    // },
+            }
+        };
+    },
 };
 
+
+// format error here
 const ErrorFormatter = (error: any) => {
-    // console.log("error:",error);
-    return {
-        message: error.message,
-        code: error.extensions.code || "INTERNAL_SERVER_ERROR",
-        status: error.extensions.status || 500,
-    };
+    delete error.locations;
+    return error;
 };
 
 // Create apollo/GraphQL server
