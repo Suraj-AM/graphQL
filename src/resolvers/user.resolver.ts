@@ -15,9 +15,12 @@ const userQuery = {
         return { "accessToken": token };
     }),
     getUser: asyncGraphQLRequest(async (_: any, args: any, contextValue: any) => {
+        if (!contextValue.user) {
+            throw new customGraphQLError(401, "Please add access token!", "UNAUTHORIZED");
+        }
         const userID = args.userID;
-        if(!userID){
-            throw new customGraphQLError(401,"please provide user id", 'NOT_FOUND' )
+        if (!userID) {
+            throw new customGraphQLError(401, "please provide user id", 'NOT_FOUND');
         }
         const user = userService.getUserByID(userID);
         return user;
