@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"  # Replace with your TypeScript build command
   publish = "build"  # Replace with your build output directory
-  node_version = "14"  # Specify your desired Node.js version
+  node_version = "18"  # Specify your desired Node.js version
 
 [build.environment]
   NODE_ENV = "production"  # Set your environment variable(s) if needed
