@@ -5,3 +5,9 @@
 
 [build.environment]
   NODE_ENV = "production"  # Set your environment variable(s) if needed
+
+
+[context.production]
+  publish = "build/"
+  command = "node index.js"
+  environment = { NODE_VERSION = "14.15.3" }
